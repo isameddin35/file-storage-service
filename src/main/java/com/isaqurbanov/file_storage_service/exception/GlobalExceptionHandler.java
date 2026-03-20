@@ -11,6 +11,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(StorageException.class)
     public ResponseEntity<String> handleStorageException(StorageException e) {
         return ResponseEntity.badRequest()
-                .body("Storage exception");
+                .body("Storage exception: " + e);
     }
 }
