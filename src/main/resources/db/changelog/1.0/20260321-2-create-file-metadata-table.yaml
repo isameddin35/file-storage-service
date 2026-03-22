@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-create-file-metadata
+      author: isa
+      changes:
+        - createTable:
+            tableName: files
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: filename
+                  type: VARCHAR(500)
+
+              - column:
+                  name: content_type
+                  type: VARCHAR(255)
+
+              - column:
+                  name: size
+                  type: BIGINT
+
+              - column:
+                  name: uploaded_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: provider_id
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+
+              - column:
+                  name: original_name
+                  type: VARCHAR(500)
+
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: deleted_at
+                  type: TIMESTAMP
+
+        - addForeignKeyConstraint:
+            baseTableName: files
+            baseColumnNames: provider_id
+            referencedTableName: providers
+            referencedColumnNames: id
+            constraintName: fk_files_provider
+            onDelete: SET NULL

@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;
 
 public interface IStorageProvider {
-    String upload(MultipartFile file);
+    void upload(MultipartFile file, String objectName);
 
     InputStream download(String key);
 

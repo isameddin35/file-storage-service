@@ -2,9 +2,21 @@ spring:
   application:
     name: file-storage-service
 
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/file_store}
+    username: ${SPRING_DATASOURCE_USERNAME:isa}
+    password: ${SPRING_DATASOURCE_PASSWORD:isaisa}
+    driver-class-name: org.postgresql.Driver
+
+
 storage:
-  provider: ${STORAGE_PROVIDER:minio_local}
-  bucket-name: ${STORAGE_BUCKET:first}
+  provider: ${STORAGE_PROVIDER:minio_prod}
+  bucket: ${STORAGE_BUCKET:first}
 
 minio:
   endpoint: ${MINIO_ENDPOINT:http://localhost:9000}

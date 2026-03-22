@@ -1,5 +1,6 @@
 # ===== Stage 1: Build =====
 FROM eclipse-temurin:21-jdk AS build
+#FROM alpine:21-jdk AS build
 
 WORKDIR /app
 
@@ -23,6 +24,7 @@ RUN ./gradlew clean bootJar --no-daemon
 
 # ===== Stage 2: Run =====
 FROM eclipse-temurin:21-jdk
+#FROM alpine:21-jdk
 
 WORKDIR /app
 
