@@ -8,12 +8,6 @@ A secure file storage and management service built with **Spring Boot**, **Postg
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Setup & Installation](#setup--installation)
-- [Configuration](#configuration)
-- [API Endpoints](#api-endpoints)
-- [Authentication](#authentication)
-- [Audit Logs](#audit-logs)
-- [Contributing](#contributing)
-- [License](#license)
 
 ---
 
@@ -44,12 +38,11 @@ A secure file storage and management service built with **Spring Boot**, **Postg
 
 - Java 17+
 - Docker & Docker Compose
-- PostgreSQL
-- MinIO (or any S3-compatible storage)
+
 
 ### Running with Docker Compose
 
 ```bash
-git clone <your-repo-url>
+git clone [<your-repo-url>](https://github.com/isameddin35/file-storage-service.git)
 cd file-storage-service
 docker-compose up -d
