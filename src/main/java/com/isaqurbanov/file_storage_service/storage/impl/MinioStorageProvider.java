@@ -70,15 +70,17 @@ public class MinioStorageProvider implements IStorageProvider {
         }
     }
 
-    @Override
-    public void delete(String objectName) {
-        try {
-            minioClient.removeObject(RemoveObjectArgs.builder()
-                    .bucket(bucket)
-                    .object(objectName)
-                    .build());
-        } catch (Exception e) {
-            throw new FileStorageException("Failed to delete file", e);
-        }
-    }
+    //HARD DELETE
+
+//    @Override
+//    public void delete(String objectName) {
+//        try {
+//            minioClient.removeObject(RemoveObjectArgs.builder()
+//                    .bucket(bucket)
+//                    .object(objectName)
+//                    .build());
+//        } catch (Exception e) {
+//            throw new FileStorageException("Failed to delete file", e);
+//        }
+//    }
 }

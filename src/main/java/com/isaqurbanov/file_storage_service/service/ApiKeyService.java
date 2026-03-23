@@ -30,6 +30,7 @@ public class ApiKeyService {
         apiKeyRepository.deactivateAllForUser(user);
 
         String rawKey = ApiKeyUtils.generateKey();
+
         ApiKey apiKey = new ApiKey();
         apiKey.setHashedKey(ApiKeyUtils.hashKey(rawKey));
         apiKey.setUser(user);

@@ -9,5 +9,5 @@ public interface IStorageProvider {
 
     InputStream download(String key);
 
-    void delete(String key);
+//    void delete(String key);
 }
