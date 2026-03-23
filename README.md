@@ -43,6 +43,6 @@ A secure file storage and management service built with **Spring Boot**, **Postg
 ### Running with Docker Compose
 
 ```bash
-git clone [<your-repo-url>](https://github.com/isameddin35/file-storage-service.git)
+git clone https://github.com/isameddin35/file-storage-service.git
 cd file-storage-service
 docker-compose up -d
