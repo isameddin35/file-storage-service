@@ -1,7 +1,6 @@
 package com.isaqurbanov.file_storage_service.service;
 
 import com.isaqurbanov.file_storage_service.exception.FileNotFoundException;
-import com.isaqurbanov.file_storage_service.exception.FileStorageException;
 import com.isaqurbanov.file_storage_service.exception.FileUploadException;
 import com.isaqurbanov.file_storage_service.mapper.FileMetadataMapper;
 import com.isaqurbanov.file_storage_service.model.entity.FileMetadata;
@@ -12,7 +11,6 @@ import com.isaqurbanov.file_storage_service.storage.IStorageProvider;
 import com.isaqurbanov.file_storage_service.util.FileUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.FetchNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
