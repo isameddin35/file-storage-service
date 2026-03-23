@@ -1,6 +1,5 @@
 package com.isaqurbanov.file_storage_service.controller;
 
-import com.isaqurbanov.file_storage_service.model.entity.FileMetadata;
 import com.isaqurbanov.file_storage_service.model.entity.dto.response.FileMetadataResponseDto;
 import com.isaqurbanov.file_storage_service.service.FileService;
 import lombok.RequiredArgsConstructor;

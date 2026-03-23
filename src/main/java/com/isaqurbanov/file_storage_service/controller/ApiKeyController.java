@@ -1,9 +1,6 @@
 package com.isaqurbanov.file_storage_service.controller;
 
-import com.isaqurbanov.file_storage_service.model.entity.ApiKey;
-import com.isaqurbanov.file_storage_service.repository.ApiKeyRepository;
 import com.isaqurbanov.file_storage_service.service.ApiKeyService;
-import com.isaqurbanov.file_storage_service.util.ApiKeyUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
