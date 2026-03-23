@@ -26,11 +26,11 @@ public class AuditLog {
     private Action action;
 
     @Enumerated(EnumType.STRING)
-    private EntityType entityType;    // FILE / API_KEY / PROVIDER
+    private EntityType entityType;
 
-    private Long entityId;      // fileId, apiKeyId, etc.
+    private Long entityId;
 
-    private String performedBy;   // API key used
+    private String performedBy;
 
     @Builder.Default
     private LocalDateTime timestamp = LocalDateTime.now();

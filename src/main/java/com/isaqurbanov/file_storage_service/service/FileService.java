@@ -1,6 +1,8 @@
 package com.isaqurbanov.file_storage_service.service;
 
-import com.isaqurbanov.file_storage_service.exception.StorageException;
+import com.isaqurbanov.file_storage_service.exception.FileNotFoundException;
+import com.isaqurbanov.file_storage_service.exception.FileStorageException;
+import com.isaqurbanov.file_storage_service.exception.FileUploadException;
 import com.isaqurbanov.file_storage_service.mapper.FileMetadataMapper;
 import com.isaqurbanov.file_storage_service.model.entity.FileMetadata;
 import com.isaqurbanov.file_storage_service.model.entity.Provider;
@@ -10,6 +12,7 @@ import com.isaqurbanov.file_storage_service.storage.IStorageProvider;
 import com.isaqurbanov.file_storage_service.util.FileUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.FetchNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,7 +43,7 @@ public class FileService {
         try {
             storageProvider.upload(file, objectName);
         } catch (Exception e) {
-            throw new StorageException("Failed to upload file to storage provider", e);
+            throw new FileUploadException(objectName);
         }
 
         FileMetadata metadata = FileMetadata.builder()
@@ -60,10 +63,10 @@ public class FileService {
 
     public InputStream download(String objectName) {
         FileMetadata fileMetadata = fileMetadataRepository.findByFilename(objectName)
-                .orElseThrow(() -> new RuntimeException("File not found"));
+                .orElseThrow(() -> new FileNotFoundException(objectName));
 
         if (fileMetadata.isDeleted()) {
-            throw new RuntimeException("File has been deleted");
+            throw new FileNotFoundException(objectName);
         }
 
         fileAuditService.logFileDownload(fileMetadata);
@@ -73,10 +76,10 @@ public class FileService {
     }
 
     @Transactional
-    public void delete(String objectName) {
+    public String delete(String objectName) {
 
         FileMetadata fileMetadata = fileMetadataRepository.findByFilename(objectName)
-                .orElseThrow(() -> new RuntimeException("File not found"));
+                .orElseThrow(() -> new FileNotFoundException(objectName));
 
         fileMetadata.setDeleted(true);
         fileMetadata.setDeletedAt(LocalDateTime.now());
@@ -84,5 +87,7 @@ public class FileService {
         fileMetadataRepository.save(fileMetadata);
 
         fileAuditService.logFileDelete(fileMetadata);
+
+        return "File " + objectName + " has been deleted";
     }
 }

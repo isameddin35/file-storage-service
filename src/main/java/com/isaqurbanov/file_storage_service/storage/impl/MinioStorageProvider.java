@@ -1,6 +1,7 @@
 package com.isaqurbanov.file_storage_service.storage.impl;
 
-import com.isaqurbanov.file_storage_service.exception.StorageException;
+import com.isaqurbanov.file_storage_service.exception.BucketInitializationException;
+import com.isaqurbanov.file_storage_service.exception.FileStorageException;
 import com.isaqurbanov.file_storage_service.storage.IStorageProvider;
 import io.minio.*;
 import jakarta.annotation.PostConstruct;
@@ -31,7 +32,7 @@ public class MinioStorageProvider implements IStorageProvider {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException("Failed to initialize bucket", e);
+            throw new BucketInitializationException(bucket);
         }
     }
 
@@ -51,7 +52,7 @@ public class MinioStorageProvider implements IStorageProvider {
             );
 
         } catch (Exception e) {
-            throw new StorageException("Failed to upload file", e);
+            throw new FileStorageException("Failed to upload file", e);
         }
     }
 
@@ -65,7 +66,7 @@ public class MinioStorageProvider implements IStorageProvider {
                             .build()
             );
         } catch (Exception e) {
-            throw new StorageException("Failed to download file", e);
+            throw new FileStorageException("Failed to download file", e);
         }
     }
 
@@ -77,7 +78,7 @@ public class MinioStorageProvider implements IStorageProvider {
                     .object(objectName)
                     .build());
         } catch (Exception e) {
-            throw new StorageException("Failed to delete file", e);
+            throw new FileStorageException("Failed to delete file", e);
         }
     }
 }

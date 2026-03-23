@@ -29,7 +29,7 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        if (path.equals("/admin/api-keys")) {
+        if (path.equals("/admin/api-keys") || path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -41,6 +41,7 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
             response.getWriter().write("Invalid or missing API Key");
             return;
         }
+
 
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(apiKey, null, List.of());

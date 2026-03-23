@@ -18,20 +18,6 @@ public class StorageConfig {
 
     private String bucket;
 
-//    @Bean
-//    @ConditionalOnProperty(name = "storage.provider", havingValue = "minio_local")
-//    public IStorageProvider minioLocalProvider(MinioClient minioClient) {
-//
-//        return new MinioStorageProvider(minioClient, bucket);
-//    }
-//
-//    @Bean
-//    @ConditionalOnProperty(name = "storage.provider", havingValue = "minio_prod")
-//    public IStorageProvider minioProdProvider(MinioClient minioClient) {
-//
-//        return new MinioStorageProvider(minioClient, bucket);
-//    }
-
     @Bean
     @ConditionalOnProperty(name = "storage.provider", havingValue = "minio")
     public IStorageProvider minioProvider(MinioClient minioClient) {

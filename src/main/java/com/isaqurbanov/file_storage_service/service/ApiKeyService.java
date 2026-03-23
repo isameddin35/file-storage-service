@@ -25,13 +25,10 @@ public class ApiKeyService {
     @Transactional
     public String generateApiKey() {
 
-        // Get or create the current user
         User user = getOrCreateCurrentUser();
 
-        // Deactivate existing keys
         apiKeyRepository.deactivateAllForUser(user);
 
-        // Create and save new API key
         String rawKey = ApiKeyUtils.generateKey();
         ApiKey apiKey = new ApiKey();
         apiKey.setHashedKey(ApiKeyUtils.hashKey(rawKey));
@@ -39,7 +36,6 @@ public class ApiKeyService {
         user.getApiKeys().add(apiKey);
         apiKeyRepository.save(apiKey);
 
-        // Audit
         fileAuditService.logApiKeyGenerate(apiKey);
 
         System.out.println("API key generated for user: " + user.getUsername());

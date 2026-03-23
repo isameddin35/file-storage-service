@@ -1,5 +1,6 @@
 package com.isaqurbanov.file_storage_service.service;
 
+import com.isaqurbanov.file_storage_service.exception.ProviderNotFoundException;
 import com.isaqurbanov.file_storage_service.model.entity.Provider;
 import com.isaqurbanov.file_storage_service.repository.ProviderRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ public class ProviderService {
 
     public Provider getProvider(String name) {
         return providerRepository.findByName(name)
-                .orElseThrow(() -> new RuntimeException("Provider not found: " + name));
+                .orElseThrow(() -> new ProviderNotFoundException(name));
     }
 
 }
