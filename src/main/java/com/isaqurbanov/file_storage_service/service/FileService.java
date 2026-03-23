@@ -1,10 +1,13 @@
 package com.isaqurbanov.file_storage_service.service;
 
 import com.isaqurbanov.file_storage_service.exception.StorageException;
+import com.isaqurbanov.file_storage_service.mapper.FileMetadataMapper;
 import com.isaqurbanov.file_storage_service.model.entity.FileMetadata;
 import com.isaqurbanov.file_storage_service.model.entity.Provider;
+import com.isaqurbanov.file_storage_service.model.entity.dto.response.FileMetadataResponseDto;
 import com.isaqurbanov.file_storage_service.repository.FileMetadataRepository;
 import com.isaqurbanov.file_storage_service.storage.IStorageProvider;
+import com.isaqurbanov.file_storage_service.util.FileUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,16 +24,18 @@ public class FileService {
 
     private final ProviderService providerService;
     private final FileMetadataRepository fileMetadataRepository;
+    private final FileMetadataMapper mapper;
+    private final FileAuditService fileAuditService;
 
     @Value("${storage.provider}")
     private String providerName;
 
     @Transactional
-    public FileMetadata upload(MultipartFile file) {
+    public FileMetadataResponseDto upload(MultipartFile file) {
 
         Provider provider = providerService.getProvider(providerName);
 
-        String objectName = generateUniqueObjectName(file.getOriginalFilename());
+        String objectName = FileUtils.generateUniqueObjectName(file.getOriginalFilename());
 
         try {
             storageProvider.upload(file, objectName);
@@ -39,68 +43,46 @@ public class FileService {
             throw new StorageException("Failed to upload file to storage provider", e);
         }
 
-        FileMetadata metadata = new FileMetadata();
-        metadata.setFilename(objectName);
-        metadata.setOriginalName(file.getOriginalFilename());
-        metadata.setContentType(file.getContentType());
-        metadata.setSize(file.getSize());
-        metadata.setUploadedAt(LocalDateTime.now());
-        metadata.setProvider(provider);
+        FileMetadata metadata = FileMetadata.builder()
+                .filename(objectName)
+                .originalName(file.getOriginalFilename())
+                .contentType(file.getContentType())
+                .size(file.getSize())
+                .provider(provider).build();
 
-        try {
-            return fileMetadataRepository.save(metadata);
-        } catch (Exception e) {
-            try {
-                storageProvider.delete(objectName);
-            } catch (Exception ex) {
-                System.err.println("Failed to delete file after DB save failure: " + ex.getMessage());
-            }
-            throw new RuntimeException("Failed to save file metadata to DB", e);
-        }
+        fileMetadataRepository.save(metadata);
+
+        fileAuditService.logFileUpload(metadata);
+
+        return mapper.toDto(metadata);
+
     }
 
-
     public InputStream download(String objectName) {
-        FileMetadata file = fileMetadataRepository.findByFilename(objectName)
+        FileMetadata fileMetadata = fileMetadataRepository.findByFilename(objectName)
                 .orElseThrow(() -> new RuntimeException("File not found"));
 
-        if (file.isDeleted()) {
+        if (fileMetadata.isDeleted()) {
             throw new RuntimeException("File has been deleted");
         }
 
-        return storageProvider.download(file.getFilename());
+        fileAuditService.logFileDownload(fileMetadata);
+
+        return storageProvider.download(fileMetadata.getFilename());
 
     }
-
-//    @Transactional
-//    public void delete(String objectName) {
-//
-//        FileMetadata file = fileMetadataRepository.findByFilename(objectName)
-//                .orElseThrow(() -> new RuntimeException("File not found"));
-//
-//        try {
-//            storageProvider.delete(objectName);
-//        } catch (Exception e) {
-//            throw new RuntimeException("Failed to delete file from storage", e);
-//        }
-//
-//        fileMetadataRepository.delete(file);
-//    }
 
     @Transactional
     public void delete(String objectName) {
 
-        FileMetadata file = fileMetadataRepository.findByFilename(objectName)
+        FileMetadata fileMetadata = fileMetadataRepository.findByFilename(objectName)
                 .orElseThrow(() -> new RuntimeException("File not found"));
 
-        file.setDeleted(true);
-        file.setDeletedAt(LocalDateTime.now());
+        fileMetadata.setDeleted(true);
+        fileMetadata.setDeletedAt(LocalDateTime.now());
 
-        fileMetadataRepository.save(file);
+        fileMetadataRepository.save(fileMetadata);
+
+        fileAuditService.logFileDelete(fileMetadata);
     }
-
-    private String generateUniqueObjectName(String filename) {
-        return UUID.randomUUID() + "_" + filename;
-    }
-
 }

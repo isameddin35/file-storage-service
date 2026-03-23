@@ -29,7 +29,7 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        if (path.equals("/admin/apikeys")) {
+        if (path.equals("/admin/api-keys")) {
             filterChain.doFilter(request, response);
             return;
         }

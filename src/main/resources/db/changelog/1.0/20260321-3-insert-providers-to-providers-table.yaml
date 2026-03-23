@@ -8,24 +8,10 @@ databaseChangeLog:
             columns:
               - column:
                   name: name
-                  value: minio_local
-
+                  value: minio
         - insert:
             tableName: providers
             columns:
               - column:
                   name: name
-                  value: minio_prod
-
-        - insert:
-            tableName: providers
-            columns:
-              - column:
-                  name: name
-                  value: s3_local
-        - insert:
-            tableName: providers
-            columns:
-              - column:
-                  name: name
-                  value: s3_prod
+                  value: s3

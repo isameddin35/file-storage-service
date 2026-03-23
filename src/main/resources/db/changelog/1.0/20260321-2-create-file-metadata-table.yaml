@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 002-create-file-metadata
-      author: isa
+      author: isameddin
       changes:
         - createTable:
             tableName: files

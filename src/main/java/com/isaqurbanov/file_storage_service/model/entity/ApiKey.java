@@ -20,4 +20,8 @@ public class ApiKey {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     private boolean active = true;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

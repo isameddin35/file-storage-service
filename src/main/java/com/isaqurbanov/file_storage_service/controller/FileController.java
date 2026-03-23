@@ -1,6 +1,7 @@
 package com.isaqurbanov.file_storage_service.controller;
 
 import com.isaqurbanov.file_storage_service.model.entity.FileMetadata;
+import com.isaqurbanov.file_storage_service.model.entity.dto.response.FileMetadataResponseDto;
 import com.isaqurbanov.file_storage_service.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
@@ -21,11 +22,11 @@ public class FileController {
 
     @GetMapping("hello")
     public String hello() {
-        return "Salam";
+        return "HEllo";
     }
 
     @PostMapping
-    public ResponseEntity<FileMetadata> upload(@RequestParam MultipartFile file) {
+    public ResponseEntity<FileMetadataResponseDto> upload(@RequestParam MultipartFile file) {
         return ResponseEntity.ok().body(fileService.upload(file));
     }
 

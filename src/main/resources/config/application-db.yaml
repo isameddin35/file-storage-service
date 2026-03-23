@@ -1,0 +1,10 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/file_store}
+    username: ${SPRING_DATASOURCE_USERNAME:isa}
+    password: ${SPRING_DATASOURCE_PASSWORD:isaisa}
+    driver-class-name: org.postgresql.Driver

@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 003-create-api-keys
-      author: isa
+      author: isameddin
       changes:
         - createTable:
             tableName: api_keys

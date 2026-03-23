@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: file-storage-service
+
+  profiles:
+    include:
+      - db
+      - file
+      - storage

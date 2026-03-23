@@ -1,21 +1,20 @@
 databaseChangeLog:
   - changeSet:
-      id: 001-create-provider
-      author: isameddin
+      id: 1-create-users-table
+      author: isa
       changes:
         - createTable:
-            tableName: providers
+            tableName: users
             columns:
               - column:
                   name: id
-                  type: BIGSERIAL
+                  type: BIGINT
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
-
               - column:
-                  name: name
+                  name: username
                   type: VARCHAR(255)
                   constraints:
                     nullable: false
-                    unique: true
